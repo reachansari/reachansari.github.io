@@ -1,0 +1,114 @@
+(function ($) {
+  $(function () {
+    $(".sidenav").sidenav();
+    $(".parallax").parallax();
+  });
+
+  var typed = new Typed("#typedText", {
+    strings: [
+      "Full Stack Web Developer",
+      "Web Designer",
+      "Frontend Developer",
+      "Backend Developer",
+    ],
+    typeSpeed: 80,
+    loop: true,
+    backDelay: 1100,
+    backSpeed: 30,
+    smartBackspace: true,
+  });
+})(jQuery); // end of jQuery name space
+
+$(window).on("scroll", function () {
+  if ($(window).scrollTop() > 50) {
+    $(".toolbar").addClass("active");
+  } else {
+    //remove the background property so it comes transparent again (defined in your css)
+    $(".toolbar").removeClass("active");
+  }
+});
+
+// ===================
+
+// Cache selectors
+var lastId,
+  topMenu = $("#mainNav"),
+  topMenuHeight = topMenu.outerHeight() + 1,
+  // All list items
+  menuItems = topMenu.find("a"),
+  // Anchors corresponding to menu items
+  scrollItems = menuItems.map(function () {
+    var item = $($(this).attr("href"));
+    if (item.length) {
+      return item;
+    }
+  });
+
+// Bind click handler to menu items
+// so we can get a fancy scroll animation
+menuItems.click(function (e) {
+  var href = $(this).attr("href"),
+    offsetTop = href === "#" ? 0 : $(href).offset().top - topMenuHeight + 1;
+  $("html, body").stop().animate(
+    {
+      scrollTop: offsetTop,
+    },
+    850
+  );
+  e.preventDefault();
+});
+
+// Bind to scroll
+$(window).scroll(function () {
+  // Get container scroll position
+  var fromTop = $(this).scrollTop() + topMenuHeight;
+
+  // Get id of current scroll item
+  var cur = scrollItems.map(function () {
+    if ($(this).offset().top < fromTop) return this;
+  });
+  // Get the id of the current element
+  cur = cur[cur.length - 1];
+  var id = cur && cur.length ? cur[0].id : "";
+
+  if (lastId !== id) {
+    lastId = id;
+    // Set/remove active class
+    menuItems
+      .parent()
+      .removeClass("active")
+      .end()
+      .filter("[href=#" + id + "]")
+      .parent()
+      .addClass("active");
+  }
+});
+
+function sendEmail() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const subject = document.getElementById("subject").value;
+  const message = document.getElementById("message").value;
+  $.LoadingOverlay("show");
+
+  Email.send({
+    SecureToken: "5e655c95-0566-458c-b5e0-23267fc5f308",
+    To: "info@techoutopia.com",
+    From: email,
+    Subject: subject,
+    Body: `
+      <h5> Hi TechoUtopia, </h5>
+      <p> ${message} </p>
+      <br>
+      <h5 style="padding:0; margin:0;"> From, </h5>
+      <h5 style="padding:0; margin:0;"> ${name} </h5>
+    `,
+  }).then((message) => {
+    document.getElementById("name").value = '';
+    document.getElementById("email").value = '';
+    document.getElementById("subject").value = '';
+    document.getElementById("message").value = '';
+    M.toast({ html: "Thanks for contacting us!!", classes: "rounded" });
+    $.LoadingOverlay("hide");
+  });
+}
