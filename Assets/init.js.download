@@ -6,10 +6,10 @@
 
   var typed = new Typed("#typedText", {
     strings: [
-      "Full Stack Web Developer",
-      "Web Designer",
-      "Frontend Developer",
-      "Backend Developer",
+      "Tech Lead",
+      "Backend Engineer",
+      "Solution Architect",
+      "Tech Lead"
     ],
     typeSpeed: 80,
     loop: true,
@@ -84,31 +84,3 @@ $(window).scroll(function () {
   }
 });
 
-function sendEmail() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const subject = document.getElementById("subject").value;
-  const message = document.getElementById("message").value;
-  $.LoadingOverlay("show");
-
-  Email.send({
-    SecureToken: "5e655c95-0566-458c-b5e0-23267fc5f308",
-    To: "info@techoutopia.com",
-    From: email,
-    Subject: subject,
-    Body: `
-      <h5> Hi TechoUtopia, </h5>
-      <p> ${message} </p>
-      <br>
-      <h5 style="padding:0; margin:0;"> From, </h5>
-      <h5 style="padding:0; margin:0;"> ${name} </h5>
-    `,
-  }).then((message) => {
-    document.getElementById("name").value = '';
-    document.getElementById("email").value = '';
-    document.getElementById("subject").value = '';
-    document.getElementById("message").value = '';
-    M.toast({ html: "Thanks for contacting us!!", classes: "rounded" });
-    $.LoadingOverlay("hide");
-  });
-}
