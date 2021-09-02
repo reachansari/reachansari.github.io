@@ -6,10 +6,10 @@
 
   var typed = new Typed("#typedText", {
     strings: [
-      "Tech Lead",
+      "Technical Lead",
       "Backend Engineer",
-      "Solution Architect",
-      "Tech Lead"
+      "Technology Architect",
+      "Technical Lead"
     ],
     typeSpeed: 80,
     loop: true,
