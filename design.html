@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stay on Page but Redirect Content</title>
+    <style>
+        iframe {
+          width: 100%;
+          height: 90vh;
+          border: none;
+        }
+    </style>
+</head>
+<body>
+<a href="#" onclick="loadSite('https://yun.kujiale.com/design/3FO3HTE5TREC/show')">Go to Example</a>
+
+<iframe id="externalFrame"></iframe>
+
+<script>
+    function loadSite(url) {
+      document.getElementById('externalFrame').src = url;
+    }
+</script>
+</body>
+</html>
