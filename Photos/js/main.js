@@ -14,14 +14,14 @@
 
 	var carousel = function() {
 		$('.home-slider').owlCarousel({
-	    loop:true,
+	    loop:false,
 	    autoplay: false,
 	    margin:0,
 	    animateOut: 'fadeOut',
 	    animateIn: 'fadeIn',
-	    nav:true,
+	    nav:false,
 	    dots: true,
-	    autoplayHoverPause: true,
+	    autoplayHoverPause: false,
 	    items: 1,
 	    navText : ["<span class='ion-ios-arrow-back'></span>","<span class='ion-ios-arrow-forward'></span>"],
 	    responsive:{
