@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My House | Simple Photo Tour</title>
+    <title>My House | Complete Tour with 3D View</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -78,7 +78,7 @@
             border-color: #3498db;
         }
 
-        /* ===== 3D VIEW SECTION ===== */
+        /* ===== IMPROVED 3D VIEW SECTION ===== */
         .view-3d-section {
             background: white;
             border-radius: 10px;
@@ -91,6 +91,9 @@
             background: #2c3e50;
             color: white;
             padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .view-3d-header h2 {
             font-size: 1.8rem;
@@ -98,17 +101,85 @@
             align-items: center;
             gap: 15px;
         }
+        .embed-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .embed-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .embed-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .embed-btn.fullscreen {
+            background: #3498db;
+            border-color: #3498db;
+        }
+        .embed-btn.return {
+            background: #27ae60;
+            border-color: #27ae60;
+        }
+
         .embed-container {
             width: 100%;
             height: 600px;
             position: relative;
             background: #f8f9fa;
         }
+
+        /* Fullscreen styles */
+        .embed-container.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: #000;
+            border-radius: 0;
+        }
+
+        .embed-container.fullscreen #kujialeIframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .fullscreen-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            gap: 10px;
+        }
+
+        .fullscreen-controls .embed-btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .fullscreen-controls .embed-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
         #kujialeIframe {
             width: 100%;
             height: 100%;
             border: none;
         }
+
         .embed-loading, .embed-fallback {
             position: absolute;
             top: 0;
@@ -122,11 +193,13 @@
             text-align: center;
             padding: 40px;
         }
+
         .embed-loading i, .embed-fallback i {
             font-size: 4rem;
             margin-bottom: 20px;
             color: #3498db;
         }
+
         .embed-fallback a {
             display: inline-block;
             margin-top: 20px;
@@ -138,6 +211,7 @@
             font-weight: 600;
             transition: background 0.3s;
         }
+
         .embed-fallback a:hover { background: #2980b9; }
 
         /* ===== ROOM SECTIONS ===== */
@@ -150,14 +224,17 @@
             overflow: hidden;
             display: none;
         }
+
         .room-section.active {
             display: block;
             animation: fadeIn 0.5s ease;
         }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
         .room-header {
             background: #2c3e50;
             color: white;
@@ -165,18 +242,23 @@
             display: flex;
             align-items: center;
         }
+
         .room-header i {
             font-size: 1.8rem;
             margin-right: 15px;
             color: #3498db;
         }
+
         .room-header h2 { font-size: 1.8rem; }
+
         .room-content { padding: 25px; }
+
         .room-description {
             margin-bottom: 25px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
         }
+
         .room-description textarea {
             width: 100%;
             padding: 15px;
@@ -188,6 +270,7 @@
             min-height: 100px;
             margin-top: 10px;
         }
+
         .room-description textarea:focus {
             outline: none;
             border-color: #3498db;
@@ -398,27 +481,20 @@
             opacity: 0.8;
         }
 
-        .zoom-instruction {
-            position: absolute;
-            bottom: 60px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: #aaa;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .lightbox:hover .zoom-instruction {
-            opacity: 1;
-        }
-
         @media (max-width: 768px) {
             .photos-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
             .embed-container { height: 400px; }
             .room-nav { flex-wrap: nowrap; }
             .room-btn { padding: 10px 20px; font-size: 0.9rem; }
+            .view-3d-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .embed-controls {
+                width: 100%;
+                justify-content: center;
+            }
             .lightbox-img.zoomed {
                 transform: scale(1.2);
             }
@@ -434,8 +510,8 @@
 <body>
 <div class="container">
     <header>
-        <h1><i class="fas fa-home"></i> My House Photo Tour</h1>
-        <p class="subtitle">3D View + All Room Photos with Click-to-Zoom</p>
+        <h1><i class="fas fa-home"></i> My House Complete Tour</h1>
+        <p class="subtitle">Interactive 3D View + All Room Photos</p>
     </header>
 
     <!-- Room Navigation -->
@@ -472,15 +548,23 @@
         </button>
     </div>
 
-    <!-- ===== 3D VIEW SECTION (First) ===== -->
+    <!-- ===== 3D VIEW SECTION (First) with Improved Controls ===== -->
     <section class="view-3d-section active" id="3d-view">
         <div class="view-3d-header">
             <h2><i class="fas fa-cube"></i> Interactive 3D House View</h2>
+            <div class="embed-controls">
+                <button class="embed-btn fullscreen" id="fullscreenBtn">
+                    <i class="fas fa-expand"></i> Fullscreen
+                </button>
+                <button class="embed-btn reload" id="reloadBtn">
+                    <i class="fas fa-redo"></i> Reload
+                </button>
+            </div>
         </div>
         <div class="room-content">
-            <p style="margin-bottom: 20px; color: #555;">Explore the interactive 3D model of the house. This embedded view shows the complete layout and design.</p>
+            <p style="margin-bottom: 20px; color: #555;">Explore the interactive 3D model of the house. Click Fullscreen for immersive view, then use Return button to come back.</p>
 
-            <div class="embed-container">
+            <div class="embed-container" id="embedContainer">
                 <div class="embed-loading" id="loadingMessage">
                     <i class="fas fa-spinner fa-spin"></i>
                     <h3>Loading 3D Model...</h3>
@@ -494,6 +578,17 @@
                         <i class="fas fa-external-link-alt"></i> Open 3D Model on Kujiale
                     </a>
                 </div>
+            </div>
+
+            <!-- Fullscreen Controls (hidden by default) -->
+            <div class="fullscreen-controls" id="fullscreenControls" style="display: none;">
+                <button class="embed-btn return" id="returnBtn">
+                    <i class="fas fa-compress"></i> Return to Page
+                </button>
+            </div>
+
+            <div class="code-example" style="margin-top: 20px;">
+                <strong>Controls:</strong> Use Fullscreen for immersive viewing • Click Return to come back • F11 key also works for fullscreen
             </div>
         </div>
     </section>
@@ -514,7 +609,7 @@
                 <div class="photo-item" data-room="bedroom5" data-index="0">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p>Replace with:<br><strong>floor-1.jpg</strong></p>
+                        <p>Replace with:<br><strong>bedroom5-1.jpg</strong></p>
                     </div>
                     <div class="photo-info">Main view - Click to zoom</div>
                     <div class="click-hint">Click to zoom</div>
@@ -522,7 +617,7 @@
                 <div class="photo-item" data-room="bedroom5" data-index="1">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p>Replace with:<br><strong>floor2-2.jpg</strong></p>
+                        <p>Replace with:<br><strong>bedroom5-2.jpg</strong></p>
                     </div>
                     <div class="photo-info">Closet area - Click to zoom</div>
                     <div class="click-hint">Click to zoom</div>
@@ -743,9 +838,9 @@
     </section>
 
     <footer>
-        <p>My House Photo Tour &copy; 2023</p>
+        <p>My House Complete Tour &copy; 2023</p>
         <p style="margin-top: 10px; font-size: 0.9rem;">
-            <i class="fas fa-mouse-pointer"></i> Click photos to zoom | Click again to zoom out
+            <i class="fas fa-expand"></i> Use Fullscreen for immersive 3D viewing • Click photos to zoom
         </p>
     </footer>
 </div>
@@ -761,7 +856,6 @@
         <img class="lightbox-img" id="lightboxImg" src="" alt="">
         <div class="lightbox-caption" id="lightboxCaption"></div>
         <div class="lightbox-counter" id="lightboxCounter"></div>
-        <div class="zoom-instruction" id="zoomInstruction">Click image to zoom in/out</div>
     </div>
 </div>
 
@@ -769,8 +863,8 @@
     // ===== ROOM CONFIGURATION =====
     const roomConfig = {
         'bedroom5': {
-            photos: ['floor-1.jpg', 'floor-2.jpg'],
-            captions: ['3D', 'Measurement']
+            photos: ['bedroom5-1.jpg', 'bedroom5-2.jpg'],
+            captions: ['Main view of bedroom 5', 'Closet and storage area']
         },
         'living': {
             photos: ['living-room-1.jpg', 'living-room-2.jpg'],
@@ -806,42 +900,17 @@
         }
     };
 
-    // ===== ROOM NAVIGATION =====
-    function setupRoomNavigation() {
-        const roomBtns = document.querySelectorAll('.room-btn');
-        const roomSections = document.querySelectorAll('.room-section, .view-3d-section');
+    // ===== IMPROVED 3D VIEW WITH FULLSCREEN CONTROLS =====
+    let isFullscreen = false;
+    const embedContainer = document.getElementById('embedContainer');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    const returnBtn = document.getElementById('returnBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const fullscreenControls = document.getElementById('fullscreenControls');
 
-        roomBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const roomId = this.getAttribute('data-room');
-
-                // Update active button
-                roomBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // Show selected room section
-                roomSections.forEach(section => {
-                    section.classList.remove('active');
-                });
-
-                const targetSection = document.getElementById(roomId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
-
-                    // If switching to 3D view, ensure it's loaded
-                    if (roomId === '3d-view') {
-                        ensure3DViewLoaded();
-                    }
-                }
-            });
-        });
-    }
-
-    // ===== 3D VIEW LOADING =====
     function setup3DView() {
         const loadingMessage = document.getElementById('loadingMessage');
         const fallbackMessage = document.getElementById('fallbackMessage');
-        const embedContainer = document.querySelector('.embed-container');
 
         // Create iframe
         const iframe = document.createElement('iframe');
@@ -885,13 +954,118 @@
                 showFallback();
             }
         }, 8000);
+
+        // Fullscreen functionality
+        setupFullscreenControls(iframe);
     }
 
-    function ensure3DViewLoaded() {
-        const iframe = document.getElementById('kujialeIframe');
-        if (iframe && iframe.style.display === 'none') {
-            iframe.style.display = 'block';
+    function setupFullscreenControls(iframe) {
+        // Fullscreen button
+        fullscreenBtn.addEventListener('click', function() {
+            enterFullscreen();
+        });
+
+        // Return button
+        returnBtn.addEventListener('click', function() {
+            exitFullscreen();
+        });
+
+        // Reload button
+        reloadBtn.addEventListener('click', function() {
+            iframe.src = iframe.src;
+            const loadingMessage = document.getElementById('loadingMessage');
+            const fallbackMessage = document.getElementById('fallbackMessage');
+            loadingMessage.style.display = 'flex';
+            fallbackMessage.style.display = 'none';
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F11') {
+                e.preventDefault();
+                if (!isFullscreen) {
+                    enterFullscreen();
+                } else {
+                    exitFullscreen();
+                }
+            }
+
+            if (e.key === 'Escape' && isFullscreen) {
+                exitFullscreen();
+            }
+        });
+
+        // Fullscreen change events
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+    }
+
+    function enterFullscreen() {
+        if (!isFullscreen) {
+            embedContainer.classList.add('fullscreen');
+            fullscreenControls.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            isFullscreen = true;
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            console.log('Entered fullscreen mode');
         }
+    }
+
+    function exitFullscreen() {
+        if (isFullscreen) {
+            embedContainer.classList.remove('fullscreen');
+            fullscreenControls.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            isFullscreen = false;
+
+            console.log('Exited fullscreen mode');
+        }
+    }
+
+    function handleFullscreenChange() {
+        if (!document.fullscreenElement &&
+            !document.webkitFullscreenElement &&
+            !document.mozFullScreenElement &&
+            !document.msFullscreenElement) {
+            // User exited fullscreen via browser controls
+            exitFullscreen();
+        }
+    }
+
+    // ===== ROOM NAVIGATION =====
+    function setupRoomNavigation() {
+        const roomBtns = document.querySelectorAll('.room-btn');
+        const roomSections = document.querySelectorAll('.room-section, .view-3d-section');
+
+        roomBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const roomId = this.getAttribute('data-room');
+
+                // Update active button
+                roomBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show selected room section
+                roomSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                const targetSection = document.getElementById(roomId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+
+                    // If switching to 3D view and in fullscreen, exit fullscreen
+                    if (roomId === '3d-view' && isFullscreen) {
+                        exitFullscreen();
+                    }
+                }
+            });
+        });
     }
 
     // ===== SIMPLE CLICK-TO-ZOOM LIGHTBOX =====
@@ -905,7 +1079,6 @@
     const lightboxClose = document.getElementById('lightboxClose');
     const lightboxPrev = document.getElementById('lightboxPrev');
     const lightboxNext = document.getElementById('lightboxNext');
-    const zoomInstruction = document.getElementById('zoomInstruction');
 
     function initializePhotoGallery() {
         document.querySelectorAll('.photo-item').forEach(item => {
@@ -944,12 +1117,6 @@
             lightboxCounter.textContent = `${index + 1} / ${photos.length}`;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
-
-            // Reset zoom instruction
-            zoomInstruction.style.opacity = '0';
-            setTimeout(() => {
-                zoomInstruction.style.opacity = '1';
-            }, 1000);
         };
 
         img.onerror = function() {
@@ -1024,7 +1191,7 @@
         // Setup room navigation
         setupRoomNavigation();
 
-        // Initialize 3D view
+        // Initialize 3D view with fullscreen controls
         setup3DView();
 
         // Initialize photo gallery
@@ -1036,7 +1203,7 @@
         // Check and load actual photos
         checkAndLoadPhotos();
 
-        // Keyboard shortcuts
+        // Keyboard shortcuts for lightbox
         document.addEventListener('keydown', function(e) {
             if (!lightbox.classList.contains('active')) return;
 
@@ -1051,17 +1218,15 @@
                     nextPhoto();
                     break;
                 case ' ':
-                    e.preventDefault();
-                    toggleZoom();
-                    break;
                 case 'z':
                 case 'Z':
+                    e.preventDefault();
                     toggleZoom();
                     break;
             }
         });
 
-        console.log('Simple House Tour loaded with click-to-zoom.');
+        console.log('House Tour loaded with fullscreen 3D controls.');
     });
 
     // ===== HELPER FUNCTIONS =====
