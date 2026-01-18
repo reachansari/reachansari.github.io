@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My House | Complete Tour with 3D View</title>
+    <title>HDB EA Resale | Complete Tour with 3D View</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -480,6 +480,65 @@
             font-size: 1rem;
             opacity: 0.8;
         }
+        /* ===== BULLET POINTS STYLING ===== */
+.bullet-points {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+}
+
+.bullet-points ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.bullet-points li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    border-bottom: 1px dashed #eee;
+}
+
+.bullet-points li:last-child {
+    border-bottom: none;
+}
+
+.bullet-points li:before {
+    content: "•";
+    color: #3498db;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    top: 5px;
+}
+
+.bullet-points ul ul {
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+.bullet-points ul ul li {
+    padding-left: 20px;
+    border-bottom: none;
+    padding: 5px 0;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.bullet-points ul ul li:before {
+    content: "○";
+    font-size: 1rem;
+    top: 3px;
+    color: #7f8c8d;
+}
+
+.bullet-points strong {
+    color: #2c3e50;
+    min-width: 120px;
+    display: inline-block;
+}
 
         @media (max-width: 768px) {
             .photos-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
@@ -510,7 +569,7 @@
 <body>
 <div class="container">
     <header>
-        <h1><i class="fas fa-home"></i> My House Complete Tour</h1>
+        <h1><i class="fas fa-home"></i> HDB EA Resale Complete Tour</h1>
         <p class="subtitle">Interactive 3D View + All Room Photos</p>
     </header>
 
@@ -520,7 +579,7 @@
             <i class="fas fa-cube"></i> 3D View
         </button>
         <button class="room-btn" data-room="bedroom5">
-            <i class="fas fa-bed"></i> Bedroom 5
+            <i class="fas fa-ruler-combined"></i> Floor Plan + Measurements
         </button>
         <button class="room-btn" data-room="living">
             <i class="fas fa-couch"></i> Living Room
@@ -588,7 +647,7 @@
             </div>
 
             <div class="code-example" style="margin-top: 20px;">
-                <strong>Controls:</strong> Use Fullscreen for immersive viewing • Click Return to come back • F11 key also works for fullscreen
+                <strong>Controls:</strong> Use Fullscreen for immersive viewing • Click Return to come back
             </div>
         </div>
     </section>
@@ -596,30 +655,33 @@
     <!-- ===== BEDROOM 5 (Guest Room) ===== -->
     <section class="room-section" id="bedroom5">
         <div class="room-header">
-            <i class="fas fa-bed"></i>
-            <h2>Bedroom 5 (Guest Room)</h2>
+            <i class="fas fa-ruler-combined"></i>
+            <h2>Floor Plan and Measurements</h2>
         </div>
         <div class="room-content">
-            <div class="room-description">
-                <h3>About This Room</h3>
-                <textarea id="desc-bedroom5">This versatile guest bedroom features large windows, ample closet space, and can easily double as a home office or exercise room.</textarea>
+            <div class="bullet-points" id="desc-bedroom5">
+                <ul>
+                    <li><strong>Plan:</strong> HDB Floor Plan</li>
+                    <li><strong>Dimension:</strong> Measurement Plan</li>
+
+                </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
             <div class="photos-grid" id="photos-bedroom5">
                 <div class="photo-item" data-room="bedroom5" data-index="0">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p>Replace with:<br><strong>bedroom5-1.jpg</strong></p>
+                        <p>Replace with:<br><strong>floor-1.jpg</strong></p>
                     </div>
-                    <div class="photo-info">Main view - Click to zoom</div>
+                    <div class="photo-info">HDB Floor Plan - Click to zoom</div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
                 <div class="photo-item" data-room="bedroom5" data-index="1">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p>Replace with:<br><strong>bedroom5-2.jpg</strong></p>
+                        <p>Replace with:<br><strong>floor-2.jpg</strong></p>
                     </div>
-                    <div class="photo-info">Closet area - Click to zoom</div>
+                    <div class="photo-info">Measurement Plan - Click to zoom</div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
             </div>
@@ -863,12 +925,12 @@
     // ===== ROOM CONFIGURATION =====
     const roomConfig = {
         'bedroom5': {
-            photos: ['bedroom5-1.jpg', 'bedroom5-2.jpg'],
-            captions: ['Main view of bedroom 5', 'Closet and storage area']
+            photos: ['floor-1.jpg', 'floor-2.jpg'],
+            captions: ['Floor Plan', 'Dimension Plan']
         },
         'living': {
-            photos: ['living-room-1.jpg', 'living-room-2.jpg'],
-            captions: ['Main view of living room', 'Entertainment area']
+            photos: ['living-room-1.jpg', 'living-room-2.jpg', 'living-room-3.jpg', 'living-room-4.jpg'],
+            captions: ['Entrance view', 'Dining and living view', 'Entertainment area','Entertainment area']
         },
         'dining': {
             photos: ['dining-room.jpg'],
