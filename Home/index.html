@@ -607,6 +607,7 @@
             opacity: 0.8;
         }
         /* ===== BULLET POINTS STYLING ===== */
+/* ===== BULLET POINTS STYLING - HIERARCHICAL ===== */
 .bullet-points {
     background: #f8f9fa;
     padding: 20px;
@@ -620,50 +621,58 @@
     padding-left: 0;
 }
 
-.bullet-points li {
-    padding: 8px 0;
-    padding-left: 25px;
+/* Main bullet points */
+.bullet-points > ul > li {
+    padding: 10px 0 10px 25px;
     position: relative;
     border-bottom: 1px dashed #eee;
 }
 
-.bullet-points li:last-child {
+.bullet-points > ul > li:last-child {
     border-bottom: none;
 }
 
-.bullet-points li:before {
-    content: "•";
+.bullet-points > ul > li:before {
+    content: "●";
     color: #3498db;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     position: absolute;
-    left: 0;
-    top: 5px;
-}
-
-.bullet-points ul ul {
-    margin-left: 20px;
-    margin-top: 5px;
-}
-
-.bullet-points ul ul li {
-    padding-left: 20px;
-    border-bottom: none;
-    padding: 5px 0;
-    font-size: 0.95rem;
-    color: #666;
-}
-
-.bullet-points ul ul li:before {
-    content: "○";
-    font-size: 1rem;
-    top: 3px;
-    color: #7f8c8d;
+    left: 5px;
+    top: 9px;
 }
 
 .bullet-points strong {
     color: #2c3e50;
-    min-width: 120px;
     display: inline-block;
+    min-width: 110px;
+}
+
+/* Nested bullet points */
+.bullet-points li > ul {
+    margin: 8px 0 8px 15px;
+    padding-left: 0;
+}
+
+.bullet-points li > ul > li {
+    padding: 4px 0 4px 20px;
+    position: relative;
+    color: #666;
+    font-size: 0.95rem;
+    border-bottom: none;
+}
+
+.bullet-points li > ul > li:before {
+    content: "○";
+    color: #95a5a6;
+    font-size: 0.9rem;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+/* Remove any conflicting styles */
+.bullet-points li > ul > li:last-child {
+    margin-bottom: 0;
 }
 
         @media (max-width: 768px) {
@@ -833,8 +842,17 @@
         <div class="room-content">
             <div class="bullet-points" id="desc-living">
                 <ul>
-                    <li><strong>Flooring:</strong> Tiles</li>
-                    <li><strong>Ceiling:</strong> False Ceiling</li>
+                    <li><strong>Flooring:</strong> Living Tiles and Foyer Tiles</li>
+                    <li><strong>Ceiling:</strong> False Ceiling with LED lighting</li>
+                    <li><strong>Window:</strong> Grill, Curtains</li>
+                    <!--<li><strong>Windows:</strong>
+                        <ul>
+                            <li><strong>Grill:</strong> Grill</li>
+                            <li><strong>Corridor:</strong> Curtains</li>
+                        </ul>
+                    </li>-->
+                    <li><strong>Lighting:</strong>Pendant Light, LED downlights with dimmer controls</li>
+                    <li><strong>Features:</strong> TV feature wall, Shoe cabinet, Console table and Store Door Cabinet</li>
                 </ul>
             </div>
 
@@ -886,7 +904,8 @@
             <div class="bullet-points" id="desc-dining">
                 <ul>
                     <li><strong>Flooring:</strong> Tiles</li>
-                    <li><strong>Ceiling:</strong> False Ceiling</li>
+                    <li><strong>Ceiling:</strong> False Ceiling with LED lighting</li>
+                    <li><strong>Island:</strong>Foldable doors</li>
                 </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
