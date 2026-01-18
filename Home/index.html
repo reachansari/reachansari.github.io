@@ -599,6 +599,9 @@
         <button class="room-btn" data-room="kids">
             <i class="fas fa-child"></i> Kids Room
         </button>
+        <button class="room-btn" data-room="guest">
+            <i class="fas fa-bed"></i> Guest Bedroom
+        </button>
         <button class="room-btn" data-room="kitchen">
             <i class="fas fa-utensil-spoon"></i> Kitchen
         </button>
@@ -778,6 +781,14 @@
                     <div class="photo-info">Island view</div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
+                <div class="photo-item" data-room="dining" data-index="2">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>dining-room-3.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Dining and cabinet view</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
 
             </div>
         </div>
@@ -826,6 +837,41 @@
         </div>
     </section>
 
+    <!-- ===== GUEST BEDROOM ===== -->
+    <section class="room-section" id="guest">
+        <div class="room-header">
+            <i class="fas fa-bed"></i>
+            <h2>Guest Bedroom</h2>
+        </div>
+        <div class="room-content">
+            <div class="bullet-points" id="desc-guest">
+                <ul>
+                    <li><strong>Flooring:</strong> Vinyl</li>
+                    <li><strong>Ceiling:</strong> False Ceiling</li>
+                </ul>
+            </div>
+            <h3>Photos (Click to zoom)</h3>
+            <div class="photos-grid" id="photos-guest">
+                <div class="photo-item" data-room="guest" data-index="0">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>guest-room-1.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Guest view -1</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+                <div class="photo-item" data-room="guest" data-index="1">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>guest-room-2.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Guest view -2</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ===== STUDY ROOM ===== -->
     <section class="room-section" id="study">
         <div class="room-header">
@@ -853,6 +899,14 @@
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
                         <p><strong>study-room-2.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Study View</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+                <div class="photo-item" data-room="study" data-index="2">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>study-room-3.jpg</strong></p>
                     </div>
                     <div class="photo-info">Study View</div>
                     <div class="click-hint">Click to zoom</div>
@@ -1059,16 +1113,20 @@
             captions: ['Entrance view', 'Dining and living view', 'TV Console and feature wall','TV Console and feature wall']
         },
         'dining': {
-            photos: ['dining-room-1.jpg','dining-room-2.jpg'],
-            captions: ['Dining table and chairs','Island view']
+            photos: ['dining-room-1.jpg','dining-room-2.jpg','dining-room-3.jpg'],
+            captions: ['Dining table and chairs','Island view','Dining table and show cabinet']
         },
         'master': {
             photos: ['master-room-1.jpg','master-room-2.jpg','master-room-3.jpg'],
             captions: ['Master view','Master view','Master view']
         },
+        'guest': {
+            photos: ['guest-room-1.jpg','guest-room-2.jpg'],
+            captions: ['Guest view','Guest view']
+        },
         'study': {
-            photos: ['study-room-1.jpg', 'study-room-2.jpg'],
-            captions: ['Study room desk', 'Study room view']
+            photos: ['study-room-1.jpg', 'study-room-2.jpg','study-room-3.jpg'],
+            captions: ['Study room desk', 'Study room view','Study room view']
         },
         'kids': {
             photos: ['kids-room-1.jpg','kids-room-2.jpg','kids-room-3.jpg'],
