@@ -962,18 +962,28 @@
             <h2>Master Toilet</h2>
         </div>
         <div class="room-content">
-            <div class="room-description">
-                <h3>About This Room</h3>
-                <textarea id="desc-mastertoilet">Ensuite bathroom with walk-in rain shower, dual vanity sinks, and modern fixtures.</textarea>
+            <div class="bullet-points" id="desc-master-toilet">
+                <ul>
+                    <li><strong>Flooring:</strong> Tiles</li>
+                    <li><strong>Ceiling:</strong> False Ceiling</li>
+                </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
             <div class="photos-grid" id="photos-mastertoilet">
                 <div class="photo-item" data-room="master-toilet" data-index="0">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p><strong>master-toilet.jpg</strong></p>
+                        <p><strong>master-toilet-1.jpg</strong></p>
                     </div>
-                    <div class="photo-info">Master bathroom</div>
+                    <div class="photo-info">Master bathroom view</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+                <div class="photo-item" data-room="master-toilet" data-index="1">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>master-toilet-2.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Master bathroom view </div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
             </div>
@@ -1059,8 +1069,8 @@
             captions: ['Kitchen view','Kitchen view','Kitchen view','Kitchen view']
         },
         'master-toilet': {
-            photos: ['master-toilet.jpg'],
-            captions: ['Master bathroom']
+            photos: ['master-toilet-1.jpg', 'master-toilet-2.jpg'],
+            captions: ['Master bathroom view','Master bathroom view']
         },
         'common-toilet': {
             photos: ['common-toilet.jpg'],
