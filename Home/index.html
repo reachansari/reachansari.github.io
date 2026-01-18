@@ -351,6 +351,132 @@
             font-size: 0.8rem;
             display: none;
         }
+        /* ===== MOBILE LIGHTBOX IMPROVEMENTS ===== */
+.lightbox-dots {
+    position: absolute;
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+    z-index: 1002;
+}
+
+.lightbox-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lightbox-dot.active {
+    background: #3498db;
+    transform: scale(1.2);
+}
+
+.swipe-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    padding: 10px;
+    z-index: 1002;
+    display: none;
+}
+
+.swipe-hint i {
+    margin-right: 8px;
+    color: #3498db;
+}
+
+/* Mobile-specific lightbox improvements */
+@media (max-width: 768px) {
+    .lightbox-nav {
+        padding: 0 10px;
+    }
+
+    .lightbox-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .lightbox-caption {
+        font-size: 1rem;
+        padding: 0 15px;
+        margin-top: 10px;
+    }
+
+    .lightbox-counter {
+        bottom: 50px;
+        font-size: 0.9rem;
+    }
+
+    .swipe-hint {
+        display: block;
+        animation: fadeInOut 3s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+    }
+
+    /* Make close button more accessible on mobile */
+    .lightbox-close {
+        top: 15px;
+        right: 20px;
+        font-size: 2.2rem;
+        background: rgba(0, 0, 0, 0.5);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Touch-friendly image zoom */
+    .lightbox-img {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .lightbox-img.zoomed {
+        transform: scale(1.3);
+    }
+}
+
+@media (max-width: 480px) {
+    .lightbox-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .lightbox-close {
+        width: 45px;
+        height: 45px;
+        font-size: 2rem;
+    }
+
+    .lightbox-dots {
+        bottom: 60px;
+    }
+
+    .swipe-hint {
+        font-size: 0.8rem;
+        bottom: 25px;
+    }
+}
 
         .photo-item:hover .click-hint {
             display: block;
@@ -1088,6 +1214,20 @@
 </div>
 
 <!-- ===== LIGHTBOX FOR CLICK-TO-ZOOM ===== -->
+<!--<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <div class="lightbox-nav">
+        <button class="lightbox-btn" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+        <button class="lightbox-btn" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+    </div>
+    <div class="lightbox-content">
+        <img class="lightbox-img" id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+        <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+</div>-->
+
+<!-- ===== LIGHTBOX FOR CLICK-TO-ZOOM ===== -->
 <div class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightboxClose">&times;</button>
     <div class="lightbox-nav">
@@ -1098,6 +1238,12 @@
         <img class="lightbox-img" id="lightboxImg" src="" alt="">
         <div class="lightbox-caption" id="lightboxCaption"></div>
         <div class="lightbox-counter" id="lightboxCounter"></div>
+    </div>
+    <!-- MOBILE-FRIENDLY NAVIGATION DOTS -->
+    <div class="lightbox-dots" id="lightboxDots"></div>
+    <!-- MOBILE SWIPE HINT -->
+    <div class="swipe-hint" id="swipeHint">
+        <i class="fas fa-arrows-alt-h"></i> Swipe to navigate
     </div>
 </div>
 
@@ -1371,10 +1517,22 @@
     }
 
     function closeLightbox() {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = 'auto';
-        isZoomed = false;
+    lightbox.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    isZoomed = false;
+
+    // Clear dots
+    const dotsContainer = document.getElementById('lightboxDots');
+    if (dotsContainer) {
+        dotsContainer.innerHTML = '';
     }
+
+    // Hide swipe hint
+    const swipeHint = document.getElementById('swipeHint');
+    if (swipeHint) {
+        swipeHint.style.display = 'none';
+    }
+}
 
     function nextPhoto() {
         const photos = roomConfig[currentRoom].photos;
@@ -1412,6 +1570,151 @@
             lightboxImg.style.cursor = 'zoom-in';
         }
     }
+
+    // ===== MOBILE-OPTIMIZED LIGHTBOX =====
+function updateLightboxDots() {
+    const dotsContainer = document.getElementById('lightboxDots');
+    const photos = roomConfig[currentRoom].photos;
+
+    dotsContainer.innerHTML = '';
+
+    photos.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'lightbox-dot';
+        if (index === currentIndex) {
+            dot.classList.add('active');
+        }
+        dot.addEventListener('click', () => {
+            currentIndex = index;
+            isZoomed = false;
+            loadCurrentPhoto();
+            updateLightboxDots();
+        });
+        dotsContainer.appendChild(dot);
+    });
+}
+
+function loadCurrentPhoto() {
+    const photos = roomConfig[currentRoom].photos;
+    const captions = roomConfig[currentRoom].captions;
+
+    lightboxImg.src = photos[currentIndex];
+    lightboxImg.alt = captions[currentIndex] || '';
+    lightboxImg.classList.remove('zoomed');
+    lightboxCaption.textContent = captions[currentIndex] || '';
+    lightboxCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+}
+
+// Update the openLightbox function to include dots
+function openLightbox(room, index) {
+    currentRoom = room;
+    currentIndex = index;
+    isZoomed = false;
+
+    const photos = roomConfig[room].photos;
+    const captions = roomConfig[room].captions;
+
+    const img = new Image();
+    img.src = photos[index];
+
+    img.onload = function() {
+        lightboxImg.src = photos[index];
+        lightboxImg.alt = captions[index] || '';
+        lightboxImg.classList.remove('zoomed');
+        lightboxCaption.textContent = captions[index] || '';
+        lightboxCounter.textContent = `${index + 1} / ${photos.length}`;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Update navigation dots
+        updateLightboxDots();
+
+        // Show swipe hint on mobile
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                const swipeHint = document.getElementById('swipeHint');
+                if (swipeHint) {
+                    swipeHint.style.display = 'block';
+                    setTimeout(() => {
+                        swipeHint.style.display = 'none';
+                    }, 3000);
+                }
+            }, 500);
+        }
+    };
+
+    img.onerror = function() {
+        alert(`Photo not found: ${photos[index]}\n\nPlease add this photo to the same folder.`);
+    };
+}
+
+// Update the nextPhoto and prevPhoto functions
+function nextPhoto() {
+    const photos = roomConfig[currentRoom].photos;
+    const captions = roomConfig[currentRoom].captions;
+    currentIndex = (currentIndex + 1) % photos.length;
+    isZoomed = false;
+
+    lightboxImg.src = photos[currentIndex];
+    lightboxImg.alt = captions[currentIndex] || '';
+    lightboxImg.classList.remove('zoomed');
+    lightboxCaption.textContent = captions[currentIndex] || '';
+    lightboxCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+    updateLightboxDots();
+}
+
+function prevPhoto() {
+    const photos = roomConfig[currentRoom].photos;
+    const captions = roomConfig[currentRoom].captions;
+    currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+    isZoomed = false;
+
+    lightboxImg.src = photos[currentIndex];
+    lightboxImg.alt = captions[currentIndex] || '';
+    lightboxImg.classList.remove('zoomed');
+    lightboxCaption.textContent = captions[currentIndex] || '';
+    lightboxCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+    updateLightboxDots();
+}
+
+// Add touch swipe support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+lightboxImg.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+});
+
+lightboxImg.addEventListener('touchend', function(e) {
+    if (isZoomed) return; // Don't swipe if zoomed in
+
+    touchEndX = e.changedTouches[0].screenX;
+    const swipeThreshold = 50;
+
+    if (touchStartX - touchEndX > swipeThreshold) {
+        // Swipe left - next photo
+        nextPhoto();
+    } else if (touchEndX - touchStartX > swipeThreshold) {
+        // Swipe right - previous photo
+        prevPhoto();
+    }
+});
+
+// Add double-tap to zoom on mobile
+let lastTap = 0;
+lightboxImg.addEventListener('touchend', function(e) {
+    if (isZoomed) return;
+
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+
+    if (tapLength < 300 && tapLength > 0) {
+        // Double tap detected
+        e.preventDefault();
+        toggleZoom();
+    }
+    lastTap = currentTime;
+});
 
     // Lightbox event listeners
     lightboxClose.addEventListener('click', closeLightbox);
