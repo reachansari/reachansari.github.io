@@ -663,7 +663,6 @@
                 <ul>
                     <li><strong>Plan:</strong> HDB Floor Plan</li>
                     <li><strong>Dimension:</strong> Measurement Plan</li>
-
                 </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
@@ -685,9 +684,9 @@
                     <div class="click-hint">Click to zoom</div>
                 </div>
             </div>
-            <div class="code-example">
+            <!--<div class="code-example">
                 <strong>To add your photo:</strong> Replace placeholder with: &lt;img src="<span style="color:#e74c3c;">bedroom5-1.jpg</span>" alt="Bedroom 5"&gt;
-            </div>
+            </div>-->
         </div>
     </section>
 
@@ -697,11 +696,19 @@
             <i class="fas fa-couch"></i>
             <h2>Living Room</h2>
         </div>
-        <div class="room-content">
+        <!--<div class="room-content">
             <div class="room-description">
                 <h3>About This Room</h3>
                 <textarea id="desc-living">Our main living area features a comfortable sectional sofa, smart TV, and large windows with a beautiful view.</textarea>
+            </div>-->
+        <div class="room-content">
+            <div class="bullet-points" id="desc-living">
+                <ul>
+                    <li><strong>Flooring:</strong> Tiles</li>
+                    <li><strong>Ceiling:</strong> False Ceiling Plan</li>
+                </ul>
             </div>
+
             <h3>Photos (Click to zoom)</h3>
             <div class="photos-grid" id="photos-living">
                 <div class="photo-item" data-room="living" data-index="0">
@@ -797,18 +804,28 @@
             <h2>Study Room</h2>
         </div>
         <div class="room-content">
-            <div class="room-description">
-                <h3>About This Room</h3>
-                <textarea id="desc-study">Home office/study room with desk, bookshelves, and comfortable work area.</textarea>
+            <div class="bullet-points" id="desc-study">
+                <ul>
+                    <li><strong>Flooring:</strong> Vinyl</li>
+                    <li><strong>Ceiling:</strong> False Ceiling Plan</li>
+                </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
             <div class="photos-grid" id="photos-study">
                 <div class="photo-item" data-room="study" data-index="0">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p><strong>study-room.jpg</strong></p>
+                        <p><strong>study-room-1.jpg</strong></p>
                     </div>
                     <div class="photo-info">Desk area</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+                <div class="photo-item" data-room="study" data-index="1">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>study-room-2.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Study View</div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
             </div>
@@ -957,8 +974,8 @@
             captions: ['Master bedroom view']
         },
         'study': {
-            photos: ['study-room.jpg'],
-            captions: ['Study room desk']
+            photos: ['study-room-1.jpg', 'study-room-2.jpg'],
+            captions: ['Study room desk', 'Study room view']
         },
         'kids': {
             photos: ['kids-room.jpg'],
