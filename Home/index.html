@@ -754,20 +754,31 @@
             <h2>Dining Room</h2>
         </div>
         <div class="room-content">
-            <div class="room-description">
-                <h3>About This Room</h3>
-                <textarea id="desc-dining">Formal dining area with a solid wood table that seats 8 people and a beautiful chandelier.</textarea>
+            <div class="bullet-points" id="desc-dining">
+                <ul>
+                    <li><strong>Flooring:</strong> Tiles</li>
+                    <li><strong>Ceiling:</strong> False Ceiling Plan</li>
+                </ul>
             </div>
             <h3>Photos (Click to zoom)</h3>
             <div class="photos-grid" id="photos-dining">
                 <div class="photo-item" data-room="dining" data-index="0">
                     <div class="photo-placeholder">
                         <i class="fas fa-image"></i>
-                        <p><strong>dining-room.jpg</strong></p>
+                        <p><strong>dining-room-1.jpg</strong></p>
                     </div>
                     <div class="photo-info">Dining table</div>
                     <div class="click-hint">Click to zoom</div>
                 </div>
+                <div class="photo-item" data-room="dining" data-index="1">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p><strong>dining-room-2.jpg</strong></p>
+                    </div>
+                    <div class="photo-info">Island view</div>
+                    <div class="click-hint">Click to zoom</div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -1028,8 +1039,8 @@
             captions: ['Entrance view', 'Dining and living view', 'TV Console and feature wall','TV Console and feature wall']
         },
         'dining': {
-            photos: ['dining-room.jpg'],
-            captions: ['Dining table and chairs']
+            photos: ['dining-room-1.jpg','dining-room-2.jpg'],
+            captions: ['Dining table and chairs','Island view']
         },
         'master': {
             photos: ['master-room-1.jpg','master-room-2.jpg','master-room-3.jpg'],
