@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My House - Interactive Photo Tour</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .instructions-box {
+            background: #e8f4fc;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .instructions-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instructions-box h3 i {
+            margin-right: 10px;
+        }
+        
+        .step {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .room-section {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 0;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .room-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .room-header i {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            color: #3498db;
+        }
+        
+        .room-header h2 {
+            font-size: 1.8rem;
+        }
+        
+        .room-content {
+            padding: 25px;
+        }
+        
+        .room-description {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .room-description textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 100px;
+            margin-top: 10px;
+        }
+        
+        .room-description textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .photo-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            height: 200px;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+        
+        .photo-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #bbb;
+        }
+        
+        .photo-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .click-hint {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(52, 152, 219, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: none;
+        }
+        
+        .photo-item:hover .click-hint {
+            display: block;
+        }
+        
+        .code-example {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            border-left: 3px solid #3498db;
+        }
+        
+        .error-message {
+            background: #ffeaea;
+            color: #e74c3c;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 25px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        /* Fullscreen Lightbox Styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 5px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+        }
+        
+        .lightbox-caption {
+            color: white;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            padding: 0 20px;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .lightbox-close:hover {
+            transform: scale(1.2);
+            color: #3498db;
+        }
+        
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+        }
+        
+        .lightbox-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .lightbox-btn:hover {
+            background: rgba(52, 152, 219, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .lightbox-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .lightbox-content {
+            animation: zoomIn 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .room-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .room-header i {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .lightbox-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .lightbox-close {
+                top: 10px;
+                right: 15px;
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .photos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-home"></i> HDB Resale EA Photo Tour</h1>
+            <p>Click on any photo to view it fullscreen</p>
+        </header>
+        
+        <!-- Instructions Section -->
+       <!-- <section class="instructions-box">
+            <h3><i class="fas fa-info-circle"></i> How to Set Up Your House Gallery</h3>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <strong>Put your photos in the SAME FOLDER as this HTML file</strong>
+                    <p>Save all your room photos in the same folder where this HTML file is saved.</p>
+                    <p><strong>Example photo names:</strong> living-room-1.jpg, dining-room.jpg, master-bedroom.jpg, etc.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <strong>Update the photo names below</strong>
+                    <p>For each room, change <code>YOUR-PHOTO-NAME.jpg</code> to your actual photo filename.</p>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <strong>Click to Enlarge Feature</strong>
+                    <p>All photos can be clicked to open in fullscreen view. Use arrow keys or on-screen buttons to navigate.</p>
+                </div>
+            </div>
+        </section>-->
+        
+        <!-- Living Room Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-couch"></i>
+                <h2>Living Room</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>Scope for this Room</h3>
+                    <textarea id="desc-living" placeholder="Describe your living room...">
+                        -> main living area features a comfortable sectional sofa
+                        -> 65-inch smart TV, and large windows with a beautiful view.
+                        -> The room gets plenty of natural light during the day.
+                    </textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-living">
+                    <!-- Photo 1 - REPLACE WITH YOUR PHOTO -->
+                    <div class="photo-item" data-lightbox="living-room" data-index="0">
+                        <!--<div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>living-room-1.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>-->
+                        <img src="living-room-1.jpg" alt="Living Room Main View">
+                        <div class="photo-info">Entrance of the house</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                    
+                    <!-- Photo 2 - REPLACE WITH YOUR PHOTO -->
+                    <div class="photo-item" data-lightbox="living-room" data-index="1">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>living-room-2.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Dining and living area</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                    
+                    <!-- Photo 3 - REPLACE WITH YOUR PHOTO -->
+                    <div class="photo-item" data-lightbox="living-room" data-index="2">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>living-room-3.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">TV and entertainment area</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+                
+               <!-- <div class="code-example">
+                    <strong>To add your photo, replace this code:</strong><br>
+                    &lt;div class="photo-placeholder"&gt;...&lt;/div&gt;<br>
+                    <strong>With this:</strong><br>
+                    &lt;img src="<span style="color:#e74c3c;">living-room-1.jpg</span>" alt="Living Room Main View"&gt;
+                </div>-->
+            </div>
+        </section>
+        
+        <!-- Dining Room Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-utensils"></i>
+                <h2>Dining Room</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-dining" placeholder="Describe your dining room...">Our formal dining area features a solid wood table that seats 8 people comfortably. We have a beautiful chandelier that provides warm lighting.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-dining">
+                    <div class="photo-item" data-lightbox="dining-room" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>dining-room.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Dining table and chairs</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Master Bedroom Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-bed"></i>
+                <h2>Master Bedroom</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-masterbed" placeholder="Describe your master bedroom...">Our spacious master bedroom features a king-size bed with a memory foam mattress. We have a walk-in closet and direct access to the ensuite bathroom.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-masterbed">
+                    <div class="photo-item" data-lightbox="master-bedroom" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>master-bedroom.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Main bedroom view</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Study Room Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-laptop"></i>
+                <h2>Study Room</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-study" placeholder="Describe your study room...">This home office is designed for productivity with a large desk, ergonomic chair, and built-in bookshelves.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-study">
+                    <div class="photo-item" data-lightbox="study-room" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>study-room.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Study desk and shelves</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Kids Room Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-child"></i>
+                <h2>Kids Room</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-kids" placeholder="Describe your kids room...">Our children's bedroom is designed to be both playful and functional with plenty of storage for toys and books.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-kids">
+                    <div class="photo-item" data-lightbox="kids-room" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>kids-room.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Kids bedroom</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Master Toilet Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-bath"></i>
+                <h2>Master Toilet</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-mastertoilet" placeholder="Describe your master toilet...">The ensuite bathroom features a walk-in rain shower with glass enclosure and dual vanity sinks.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-mastertoilet">
+                    <div class="photo-item" data-lightbox="master-toilet" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>master-toilet.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Master bathroom</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Common Toilet Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-toilet"></i>
+                <h2>Common Toilet</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-commontoilet" placeholder="Describe your common toilet...">This guest bathroom serves visitors and features a bathtub/shower combination and storage.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-commontoilet">
+                    <div class="photo-item" data-lightbox="common-toilet" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>common-toilet.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Guest bathroom</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Kitchen Section -->
+        <section class="room-section">
+            <div class="room-header">
+                <i class="fas fa-utensil-spoon"></i>
+                <h2>Kitchen</h2>
+            </div>
+            
+            <div class="room-content">
+                <div class="room-description">
+                    <h3>About This Room</h3>
+                    <textarea id="desc-kitchen" placeholder="Describe your kitchen...">Our modern kitchen features stainless steel appliances, quartz countertops, and custom cabinetry.</textarea>
+                </div>
+                
+                <h3>Photos (Click to enlarge)</h3>
+                <div class="photos-grid" id="photos-kitchen">
+                    <div class="photo-item" data-lightbox="kitchen" data-index="0">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Replace with:<br><strong>kitchen.jpg</strong></p>
+                            <small style="margin-top: 10px; color: #3498db;">(Click to view fullscreen)</small>
+                        </div>
+                        <div class="photo-info">Kitchen main view</div>
+                        <div class="click-hint">Click to enlarge</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>My House Photo Gallery &copy; 2023 | Click any photo to view fullscreen</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                <i class="fas fa-mouse-pointer"></i> Use ← → arrow keys to navigate photos | ESC to close
+            </p>
+        </footer>
+    </div>
+    
+    <!-- Lightbox Overlay -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <div class="lightbox-nav">
+            <button class="lightbox-btn" id="lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="lightbox-btn" id="lightbox-next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="lightbox-content">
+            <img class="lightbox-img" id="lightbox-img" src="" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+        </div>
+    </div>
+
+    <script>
+        // Photo configuration - UPDATE THESE NAMES TO MATCH YOUR PHOTOS
+        const roomConfig = {
+            'living-room': {
+                photos: ['living-room-1.jpg', 'living-room-2.jpg', 'living-room-3.jpg','living-room-4.jpg'],
+                captions: ['Main view of living room', 'Dining and living area', 'TV and entertainment area', 'TV and entertainment area']
+            },
+            'dining-room': {
+                photos: ['dining-room.jpg'],
+                captions: ['Dining table and chairs']
+            },
+            'master-bedroom': {
+                photos: ['master-bedroom.jpg'],
+                captions: ['Main bedroom view']
+            },
+            'study-room': {
+                photos: ['study-room.jpg'],
+                captions: ['Study desk and shelves']
+            },
+            'kids-room': {
+                photos: ['kids-room.jpg'],
+                captions: ['Kids bedroom']
+            },
+            'master-toilet': {
+                photos: ['master-toilet.jpg'],
+                captions: ['Master bathroom']
+            },
+            'common-toilet': {
+                photos: ['common-toilet.jpg'],
+                captions: ['Guest bathroom']
+            },
+            'kitchen': {
+                photos: ['kitchen-room-1.jpg', 'kitchen-room-2.jpg', 'kitchen-room-3.jpg', 'kitchen-room-3.jpg'],
+                captions: ['Kitchen view', 'Kitchen view', 'Kitchen view', 'Kitchen view']
+            }
+        };
+        
+        // Lightbox state
+        let currentGallery = '';
+        let currentIndex = 0;
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        
+        // Initialize photo placeholders with click events
+        function initializePhotoGallery() {
+            document.querySelectorAll('.photo-item').forEach(item => {
+                // Make the entire photo item clickable
+                item.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+                    
+                    const gallery = this.getAttribute('data-lightbox');
+                    const index = parseInt(this.getAttribute('data-index'));
+                    
+                    if (gallery && roomConfig[gallery]) {
+                        openLightbox(gallery, index);
+                    }
+                });
+                
+                // Add keyboard hint
+                item.setAttribute('title', 'Click to view fullscreen (or use Enter key)');
+            });
+            
+            // Add Enter key support
+            document.querySelectorAll('.photo-item').forEach(item => {
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const gallery = this.getAttribute('data-lightbox');
+                        const index = parseInt(this.getAttribute('data-index'));
+                        if (gallery && roomConfig[gallery]) {
+                            openLightbox(gallery, index);
+                        }
+                    }
+                });
+                item.setAttribute('tabindex', '0'); // Make focusable
+            });
+        }
+        
+        // Open lightbox with specific image
+        function openLightbox(gallery, index) {
+            currentGallery = gallery;
+            currentIndex = index;
+            
+            const photos = roomConfig[gallery].photos;
+            const captions = roomConfig[gallery].captions;
+            
+            // Check if photo exists before opening
+            const img = new Image();
+            img.src = photos[index];
+            
+            img.onload = function() {
+                lightboxImg.src = photos[index];
+                lightboxCaption.textContent = captions[index] || '';
+                lightboxCounter.textContent = `${index + 1} / ${photos.length}`;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            };
+            
+            img.onerror = function() {
+                alert(`Photo not found: ${photos[index]}\n\nPlease make sure:\n1. The photo is in the same folder as this HTML file\n2. The filename is exactly: ${photos[index]}`);
+            };
+        }
+        
+        // Close lightbox
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+        
+        // Navigate to next photo
+        function nextPhoto() {
+            const photos = roomConfig[currentGallery].photos;
+            const captions = roomConfig[currentGallery].captions;
+            currentIndex = (currentIndex + 1) % photos.length;
+            
+            const img = new Image();
+            img.src = photos[currentIndex];
+            
+            img.onload = function() {
+                lightboxImg.src = photos[currentIndex];
+                lightboxCaption.textContent = captions[currentIndex] || '';
+                lightboxCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+            };
+        }
+        
+        // Navigate to previous photo
+        function prevPhoto() {
+            const photos = roomConfig[currentGallery].photos;
+            const captions = roomConfig[currentGallery].captions;
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            
+            const img = new Image();
+            img.src = photos[currentIndex];
+            
+            img.onload = function() {
+                lightboxImg.src = photos[currentIndex];
+                lightboxCaption.textContent = captions[currentIndex] || '';
+                lightboxCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+            };
+        }
+        
+        // Event listeners for lightbox controls
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', prevPhoto);
+        lightboxNext.addEventListener('click', nextPhoto);
+        
+        // Close lightbox when clicking on the background
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    prevPhoto();
+                    break;
+                case 'ArrowRight':
+                    nextPhoto();
+                    break;
+                case ' ':
+                    e.preventDefault(); // Prevent space from scrolling
+                    nextPhoto();
+                    break;
+            }
+        });
+        
+        // Save descriptions to localStorage
+        function saveDescriptions() {
+            for (const room in roomConfig) {
+                const textarea = document.getElementById(`desc-${room.replace('-', '')}`);
+                if (textarea) {
+                    textarea.addEventListener('input', function() {
+                        localStorage.setItem(`house_desc_${room}`, this.value);
+                    });
+                    
+                    // Load saved description
+                    const saved = localStorage.getItem(`house_desc_${room}`);
+                    if (saved) {
+                        textarea.value = saved;
+                    }
+                }
+            }
+        }
+        
+        // Check if photos exist and replace placeholders
+        function checkAndLoadPhotos() {
+            for (const [room, config] of Object.entries(roomConfig)) {
+                config.photos.forEach((photoName, index) => {
+                    const img = new Image();
+                    img.src = photoName;
+                    
+                    img.onload = function() {
+                        // Find the photo item and replace placeholder with actual image
+                        const selector = `.photo-item[data-lightbox="${room}"][data-index="${index}"] .photo-placeholder`;
+                        const placeholder = document.querySelector(selector);
+                        
+                        if (placeholder) {
+                            placeholder.innerHTML = '';
+                            const actualImg = document.createElement('img');
+                            actualImg.src = photoName;
+                            actualImg.alt = config.captions[index] || room + ' photo';
+                            placeholder.appendChild(actualImg);
+                            placeholder.classList.remove('photo-placeholder');
+                            placeholder.style.padding = '0';
+                            
+                            // Update click hint
+                            const clickHint = placeholder.parentElement.querySelector('.click-hint');
+                            if (clickHint) {
+                                clickHint.innerHTML = '<i class="fas fa-expand"></i> Click to enlarge';
+                            }
+                        }
+                    };
+                    
+                    img.onerror = function() {
+                        console.log(`Photo not found: ${photoName}`);
+                    };
+                });
+            }
+        }
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            saveDescriptions();
+            initializePhotoGallery();
+            checkAndLoadPhotos();
+            
+            // Auto-check photos every few seconds
+            setInterval(checkAndLoadPhotos, 2000);
+            
+            // Show welcome message with instructions
+            setTimeout(() => {
+                console.log('House Gallery Ready!');
+                console.log('Click any photo to view it fullscreen');
+                console.log('Use arrow keys to navigate in fullscreen view');
+            }, 1000);
+        });
+        
+        // Make Enter key work for photo navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && document.activeElement.classList.contains('photo-item')) {
+                e.preventDefault();
+                document.activeElement.click();
+            }
+        });
+    </script>
+</body>
+</html>
